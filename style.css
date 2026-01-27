@@ -1,10 +1,10 @@
-/* Seahawks Architecture - Solid Border & Neon Glow */
+/* Director's Cut: Hard-Lock & Neon Glow */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
 }
 
-/* LOCK VIEWPORT: Prevents background from moving or bouncing */
+/* LOCKDOWN: Stops all background movement and "bounce" */
 html, body {
     margin: 0;
     padding: 0;
@@ -12,6 +12,7 @@ html, body {
     height: 100dvh;
     overflow: hidden; 
     position: fixed; 
+    touch-action: none;
 }
 
 body { 
@@ -48,7 +49,6 @@ body {
     height: 580px; 
     transform: scale(0.45); 
     background-color: #000;
-    /* Restored Solid Green Border */
     border: 10px solid var(--action-green);
     border-radius: 30px;
     box-shadow: 0 0 30px var(--action-green);
@@ -59,42 +59,34 @@ body {
 #prize { 
     width: 100%; 
     height: 100%; 
-    background-size: cover; 
-    background-position: center;
+    background: url('seahawks_wings.gif') no-repeat center center;
+    background-size: cover;
 }
 
-#scratch-canvas { 
-    position: absolute; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%;
-    z-index: 2; 
-}
-
-/* NEON GLOWING TEXT */
+/* GLOWING TEXT - FIXED POSITION */
 .neon-text {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #fff;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: -60px; 
+    margin-top: -45px; 
+    z-index: 100;
     text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
     animation: pulsate 1.5s infinite alternate;
-    z-index: 15;
 }
 
 @keyframes pulsate {
-    0% { text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green); opacity: 0.9; }
+    0% { text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green); opacity: 0.8; }
     100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; opacity: 1; }
 }
 
-/* CLAIM BUTTON: NICE SIZE LOCK */
 #claim-section {
     display: none; 
     position: absolute;
     bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 110;
 }
 
 #claim-button img {
