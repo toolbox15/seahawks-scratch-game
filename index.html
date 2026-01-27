@@ -4,89 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Seahawks Super Bowl LX Scratch-Off</title>
-    <style>
-        :root {
-            --seahawks-navy: #002244;
-            --action-green: #69BE28;
-            --wolf-grey: #A5ACAF;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--seahawks-navy);
-            font-family: 'Arial Black', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-            color: white;
-        }
-
-        #game-container {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            border: 4px solid var(--action-green);
-            border-radius: 20px;
-            box-shadow: 0 0 20px var(--action-green);
-        }
-
-        /* The Prize Image (Underneath) */
-        #prize {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            object-fit: cover;
-        }
-
-        /* The Scratch Surface (On Top) */
-        #scratch-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: pointer;
-            touch-action: none;
-            border-radius: 15px;
-        }
-
-        /* Pulsating Neon Text */
-        .neon-text {
-            font-size: 2rem;
-            color: #fff;
-            text-transform: uppercase;
-            font-style: italic;
-            margin-top: 20px;
-            text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
-            animation: pulsate 1.5s infinite alternate;
-        }
-
-        @keyframes pulsate {
-            100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; }
-        }
-
-        /* Hidden Claim Button */
-        #claim-section {
-            display: none;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        #claim-button img {
-            width: 280px;
-            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
-            transition: transform 0.1s;
-        }
-
-        #claim-button:active img { transform: scale(0.95); }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1 style="margin-bottom: 10px; font-size: 1.2rem; color: var(--wolf-grey);">SUPER BOWL LX EDITION</h1>
+    <h1 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--wolf-grey); letter-spacing: 1px;">
+        SUPER BOWL LX EDITION
+    </h1>
+
+    <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
 
     <div id="game-container">
         <img id="prize" src="seahawks_wings.gif" alt="Prize">
@@ -107,9 +33,9 @@
         const claimSection = document.getElementById('claim-section');
         let isDrawing = false;
 
-        // Load the Seahawks Cover Image
+        // Logic fix: ensure cover loads before interactions
         const coverImg = new Image();
-        coverImg.src = 'seahawks-cover.png'; // The Brushed Silver/Green ring image
+        coverImg.src = 'seahawks-cover.png'; 
         coverImg.onload = () => {
             ctx.drawImage(coverImg, 0, 0, 350, 350);
         };
@@ -133,7 +59,8 @@
             for (let i = 3; i < imageData.data.length; i += 4) {
                 if (imageData.data[i] === 0) clearedPixels++;
             }
-            if (clearedPixels / (canvas.width * canvas.height) > 0.5) {
+            // Triggering the reveal at 60% as per your project specifications
+            if (clearedPixels / (canvas.width * canvas.height) > 0.6) {
                 canvas.style.transition = 'opacity 1s';
                 canvas.style.opacity = '0';
                 setTimeout(() => {
