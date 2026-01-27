@@ -25,10 +25,8 @@
     </div>
 
     <script>
-        // ULTIMATE LOCK: Kills all touch movement on the page except the canvas
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
+        // HARD LOCK: Disables all page swiping/bouncing
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
@@ -46,10 +44,10 @@
             
             if ((clear / (580 * 580)) > 0.55) {
                 canvas.style.opacity = '0';
-                instruction.style.display = 'none';
+                instruction.style.display = 'none'; // Clear space for button
                 setTimeout(() => {
                     canvas.style.display = 'none';
-                    claimSection.style.display = 'block';
+                    claimSection.style.display = 'block'; // Show the button raised up
                 }, 300);
             }
         }
@@ -61,7 +59,7 @@
             const x = (e.touches[0].clientX - r.left) * (580 / r.width);
             const y = (e.touches[0].clientY - r.top) * (580 / r.height);
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 60, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 65, 0, Math.PI * 2); ctx.fill();
             checkProgress();
         }, { passive: false });
     </script>
