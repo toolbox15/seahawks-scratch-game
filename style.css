@@ -1,96 +1,90 @@
-/* Director's Cut: Hard-Lock & Neon Glow */
+/* DIRECTOR'S ABSOLUTE LOCKDOWN */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
 }
 
-/* LOCKDOWN: Stops all background movement and "bounce" */
+/* HARD LOCK: Kills all scrolling and browser bounce */
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100dvh;
-    overflow: hidden; 
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden !important; 
     position: fixed; 
     touch-action: none;
+    background-color: var(--seahawks-navy);
 }
 
 body { 
     background: url('background.png') no-repeat center center; 
     background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     font-family: 'Arial Black', sans-serif;
 }
 
 .main-header {
-    font-size: 1.6rem;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-size: 1.6rem; color: white;
+    text-transform: uppercase; letter-spacing: 2px;
     text-shadow: 2px 2px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
-    margin-bottom: 5px;
-    z-index: 20;
+    margin-bottom: 5px; z-index: 50;
 }
 
 #helmet-header {
-    width: 140px; 
-    height: auto;
-    margin-bottom: -35px; 
-    z-index: 10;
+    width: 140px; height: auto;
+    margin-bottom: -35px; z-index: 40;
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
 .container { 
     position: relative; 
-    width: 580px; 
-    height: 580px; 
+    width: 580px; height: 580px; 
     transform: scale(0.45); 
     background-color: #000;
     border: 10px solid var(--action-green);
     border-radius: 30px;
     box-shadow: 0 0 30px var(--action-green);
-    z-index: 5;
+    z-index: 10;
     overflow: hidden; 
 }
 
+/* PRIZE FIX: Forced to the front of the black background */
 #prize { 
-    width: 100%; 
-    height: 100%; 
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%; 
     background: url('seahawks_wings.gif') no-repeat center center;
     background-size: cover;
+    z-index: 1; 
 }
 
-/* GLOWING TEXT - FIXED POSITION */
+#scratch-canvas { 
+    position: absolute; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    z-index: 2; 
+}
+
+/* GLOWING TEXT FIX: Extreme Neon Spread */
 .neon-text {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: #fff;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: -45px; 
-    z-index: 100;
-    text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
-    animation: pulsate 1.5s infinite alternate;
+    margin-top: -30px; 
+    z-index: 100 !important;
+    text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px var(--action-green);
+    animation: pulsate 1.2s infinite alternate;
 }
 
 @keyframes pulsate {
-    0% { text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green); opacity: 0.8; }
-    100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; opacity: 1; }
+    0% { opacity: 0.7; transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 #claim-section {
-    display: none; 
-    position: absolute;
-    bottom: 8%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 110;
+    display: none; position: absolute;
+    bottom: 8%; left: 50%; transform: translateX(-50%);
+    z-index: 200;
 }
 
-#claim-button img {
-    width: 180px !important; 
-    height: auto;
-    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8));
-}
+#claim-button img { width: 180px !important; height: auto; }
