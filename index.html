@@ -9,18 +9,16 @@
 
     <h1 class="main-header">BIG GAME DAY LX</h1>
 
-    <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
+    <img src="helmet.png" style="width:140px; margin-bottom:-45px; z-index:25; filter: drop-shadow(0 0 10px #69BE28);">
 
     <div class="container">
-        <div id="prize"></div>
+        <div id="prize" style="background-image: url('seahawks_wings.gif');"></div>
         <canvas id="scratch-canvas" width="580" height="580"></canvas>
     </div>
 
-    <div id="instruction-text" class="neon-text">Scratch to Win</div>
-
     <div id="claim-section">
         <a href="https://ig.me/m/theponychicago?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
-            <img src="prize-button.png" alt="Claim Your Prize">
+            <img src="prize-button.png">
         </a>
     </div>
 
@@ -28,7 +26,6 @@
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
         const claimSection = document.getElementById('claim-section');
-        const instruction = document.getElementById('instruction-text');
 
         const coverImg = new Image();
         coverImg.src = 'seahawks-cover.png';
@@ -40,8 +37,8 @@
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
             
             if ((clear / (580 * 580)) > 0.6) {
+                canvas.style.transition = 'opacity 0.5s';
                 canvas.style.opacity = '0';
-                instruction.style.display = 'none'; 
                 setTimeout(() => {
                     canvas.style.display = 'none';
                     claimSection.style.display = 'block';
