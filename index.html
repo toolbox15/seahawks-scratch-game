@@ -12,7 +12,9 @@
         }
 
         body { 
-            background-color: var(--seahawks-navy);
+            /* Added background.png tag logic */
+            background: url('background.png') no-repeat center center fixed; 
+            background-size: cover;
             margin: 0; 
             height: 100vh;
             display: flex;
@@ -25,13 +27,13 @@
             color: white;
         }
 
-        /* The Helmet: Nice size, responsive, and glowing */
+        /* The Helmet Overlay */
         #helmet-header {
             width: 45%; 
             max-width: 180px; 
             min-width: 130px;
             height: auto;
-            margin-bottom: -25px; /* Pulls it down to overlap the box */
+            margin-bottom: -25px; 
             z-index: 10;
             filter: drop-shadow(0 0 10px var(--action-green));
         }
@@ -41,18 +43,12 @@
             position: relative; 
             width: 580px; 
             height: 580px; 
-            transform: scale(0.55); /* Scaled down for mobile viewports */
+            transform: scale(0.55); 
             background-color: #000;
             border: 8px solid var(--action-green);
             border-radius: 25px;
             box-shadow: 0 0 30px var(--action-green);
             z-index: 5;
-        }
-
-        #ig-link {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
         }
 
         #prize { 
@@ -75,9 +71,21 @@
             font-size: 2.5rem;
             text-transform: uppercase;
             font-style: italic;
-            margin-top: -40px; /* Adjusted due to container scale */
+            margin-top: -40px; 
             text-shadow: 0 0 15px var(--action-green);
             animation: pulsate 1.5s infinite alternate;
+        }
+
+        /* The Claim Section (Hidden by default) */
+        #claim-section {
+            display: none; 
+            z-index: 20;
+            margin-top: 10px;
+        }
+
+        #claim-button img {
+            width: 280px;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
         }
 
         @keyframes pulsate {
@@ -87,20 +95,24 @@
 </head>
 <body>
 
-    <h1 style="margin-bottom: 5px; font-size: 1.2rem; color: var(--wolf-grey); letter-spacing: 2px;">
+    <h1 style="margin-bottom: 5px; font-size: 1.2rem; color: var(--wolf-grey); letter-spacing: 2px; text-shadow: 2px 2px 4px #000;">
         SUPER BOWL LX CHAMPIONS
     </h1>
 
     <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
 
     <div class="container" id="game-container">
-        <a id="ig-link" href="#" target="_blank">
-            <div id="prize"></div>
-        </a>
+        <div id="prize"></div>
         <canvas id="scratch-canvas" width="580" height="580"></canvas>
     </div>
 
     <div class="neon-text">Scratch to Win</div>
+
+    <div id="claim-section">
+        <a id="ig-link" href="#" target="_blank">
+            <img src="prize-button.png" alt="Claim Your Prize">
+        </a>
+    </div>
 
     <script>
         const BAR_HANDLE = "theponychicago"; 
@@ -114,16 +126,15 @@
         const ctx = canvas.getContext('2d');
         const prizeDiv = document.getElementById('prize');
         const igLink = document.getElementById('ig-link');
+        const claimSection = document.getElementById('claim-section');
         
         let isDrawing = false;
         let isFinished = false;
 
-        // Randomize Prize
         const picked = PRIZE_POOL[Math.floor(Math.random() * PRIZE_POOL.length)];
         prizeDiv.style.backgroundImage = `url(${picked.img})`;
         igLink.href = `https://ig.me/m/${BAR_HANDLE}?text=I%20WON%20${picked.msg}!`;
 
-        // Load Seahawks Cover
         const coverImg = new Image();
         coverImg.src = './seahawks-cover.png';  
         coverImg.onload = () => {
@@ -136,18 +147,21 @@
             ctx.arc(x, y, 45, 0, Math.PI * 2); 
             ctx.fill();
             
-            // Percentage Trigger: 60%
             const pixels = ctx.getImageData(0, 0, 580, 580).data;
             let clear = 0;
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
+            
+            // If 60% cleared, show the prize button
             if ((clear / (580 * 580)) > 0.6 && !isFinished) {
                 isFinished = true;
                 canvas.style.opacity = '0';
-                igLink.style.pointerEvents = 'auto';
+                setTimeout(() => {
+                    canvas.style.display = 'none';
+                    claimSection.style.display = 'block';
+                }, 500);
             }
         }
 
-        // Mobile-friendly Interaction Logic
         canvas.addEventListener('mousemove', (e) => {
             if (!isDrawing || isFinished) return;
             const r = canvas.getBoundingClientRect();
