@@ -1,11 +1,11 @@
-/* Seahawks Architecture - BIG GAME DAY Edition */
+/* Final Seahawks Architecture - Fully Locked */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
     --wolf-grey: #A5ACAF;
 }
 
-/* 1. VIEWPORT LOCK: Stops background movement and "bounce" */
+/* LOCK VIEWPORT: Stops background movement */
 html, body {
     margin: 0;
     padding: 0;
@@ -25,14 +25,13 @@ body {
     font-family: 'Arial Black', sans-serif;
 }
 
-/* 2. HEADER: Big Game Day LX */
 .main-header {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: white;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 3px 3px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
-    margin-bottom: 0px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
+    margin-bottom: 5px;
     z-index: 20;
 }
 
@@ -44,18 +43,22 @@ body {
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
-/* 3. GAME CONTAINER: Locked scaling */
 .container { 
     position: relative; 
     width: 580px; 
     height: 580px; 
-    transform: scale(0.48); /* Balanced for most phone sizes */
+    transform: scale(0.45); /* Scales the 580px box to fit mobile */
     background-color: #000;
     border: 10px solid var(--action-green);
     border-radius: 30px;
     box-shadow: 0 0 30px var(--action-green);
     z-index: 5;
     overflow: hidden; 
+}
+
+#prize { 
+    width: 100%; height: 100%; 
+    background: url('seahawks_wings.gif') center/cover;
 }
 
 #scratch-canvas { 
@@ -65,15 +68,24 @@ body {
     z-index: 2; 
 }
 
+/* NEON GLOWING TEXT */
 .neon-text {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #fff;
     text-transform: uppercase;
-    margin-top: -50px; 
-    text-shadow: 0 0 15px var(--action-green);
+    font-style: italic;
+    margin-top: -60px; 
+    text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
+    animation: pulsate 1.5s infinite alternate;
+    z-index: 15;
 }
 
-/* 4. CLAIM BUTTON: Size locked to prevent "too big" error */
+@keyframes pulsate {
+    0% { text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green); opacity: 0.9; }
+    100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; opacity: 1; }
+}
+
+/* CLAIM BUTTON FIX */
 #claim-section {
     display: none; 
     position: absolute;
