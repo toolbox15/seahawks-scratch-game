@@ -6,47 +6,51 @@
 }
 
 body { 
-    /* 1. Background Logic: Perfect fit for all phone sizes */
-    background: url('background.png') no-repeat center center fixed; 
-    background-size: cover; /* Ensures the image fills the screen without stretching */
-    
-    /* 2. Dynamic Viewport Height: Prevents "Too Large" issues on mobile browsers */
-    height: 100dvh; 
-    width: 100vw;
-    
     margin: 0; 
+    padding: 0;
+    height: 100dvh; /* Locked to mobile screen height */
+    width: 100vw;
+    overflow: hidden;
+    background-color: var(--seahawks-navy);
+
+    /* Background Fix: Prevents "Too Large" issues */
+    background-image: url('background.png');
+    background-repeat: no-repeat;
+    background-position: top center; 
+    background-size: cover; 
+    background-attachment: fixed;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     touch-action: none; 
     font-family: 'Arial Black', sans-serif;
     color: white;
 }
 
-/* Helmet Overlay: Layered 3D Effect */
 #helmet-header {
     width: 45%; 
     max-width: 180px; 
     min-width: 130px;
     height: auto;
-    margin-bottom: -25px; /* Creates the overlap with the game box */
+    margin-bottom: -25px; 
     z-index: 10;
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
-/* The Game Container: High-Res 580px scaled for Mobile */
 .container { 
     position: relative; 
     width: 580px; 
     height: 580px; 
-    transform: scale(0.55); /* Fits the large canvas into the mobile screen width */
-    background-color: #000;
+    /* Scaled to 0.5 to let more of the background show */
+    transform: scale(0.5); 
+    background-color: rgba(0, 0, 0, 0.8);
     border: 8px solid var(--action-green);
     border-radius: 25px;
     box-shadow: 0 0 30px var(--action-green);
     z-index: 5;
+    margin-top: 20px;
 }
 
 #prize { 
@@ -65,12 +69,11 @@ body {
     border-radius: 15px;
 }
 
-/* Typography & Animations */
 .neon-text {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: -40px; 
+    margin-top: -30px; 
     text-shadow: 0 0 15px var(--action-green);
     animation: pulsate 1.5s infinite alternate;
 }
@@ -79,16 +82,15 @@ body {
     100% { text-shadow: 0 0 20px var(--action-green), 0 0 30px #fff; }
 }
 
-/* Hidden Claim Button Section */
 #claim-section {
     display: none; 
     z-index: 20;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: center;
 }
 
 #claim-button img {
-    width: 280px;
+    width: 250px;
     filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
     transition: transform 0.1s;
 }
