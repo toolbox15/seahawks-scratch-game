@@ -1,4 +1,4 @@
-/* DIRECTOR'S MASTER LOCK: STADIUM EDITION */
+/* DIRECTOR'S FINAL MASTER: 3D CINEMA LOCKDOWN */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
@@ -7,7 +7,7 @@
 /* HARD LOCK: Zero movement on mobile */
 html, body {
     margin: 0; padding: 0;
-    width: 100%; height: 100%;
+    width: 100vw; height: 100dvh;
     overflow: hidden !important; 
     position: fixed; 
     touch-action: none;
@@ -47,21 +47,22 @@ body {
     overflow: hidden; 
 }
 
-/* PRIZE: Stadium Cinematic Reveal */
+/* 3D PRIZE REVEAL: Point this file to your 360 rotation gif */
 #prize { 
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%; 
-    background: url('seahawks_wings.gif') no-repeat center center;
+    background: url('prize-reveal.gif') no-repeat center center;
     background-size: cover;
     z-index: 1; 
     animation: stadium-flare 3s linear infinite;
 }
 
+/* Commercial-style lighting sheen */
 @keyframes stadium-flare {
-    0% { filter: brightness(1) saturate(1); }
-    50% { filter: brightness(1.3) saturate(1.2); }
-    100% { filter: brightness(1) saturate(1); }
+    0% { filter: brightness(1) contrast(1); }
+    50% { filter: brightness(1.2) contrast(1.2) saturate(1.1); }
+    100% { filter: brightness(1) contrast(1); }
 }
 
 #scratch-canvas { 
@@ -88,10 +89,10 @@ body {
     100% { opacity: 1; text-shadow: 0 0 25px var(--action-green), 0 0 5px #fff; }
 }
 
-/* RAISED CLAIM BUTTON: Raised by an additional 5% */
+/* RAISED CLAIM BUTTON: Sitting 5% higher as requested */
 #claim-section {
     display: none; 
-    margin-top: -85px; /* Director's Update: Pulled up by 5% additional */
+    margin-top: -85px; 
     z-index: 200;
     text-align: center;
 }
