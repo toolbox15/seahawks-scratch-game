@@ -1,4 +1,4 @@
-/* DIRECTOR'S FINAL MASTER: 3D CINEMA LOCKDOWN */
+/* DIRECTOR'S FINAL MASTER: VISIBILITY & LAYER LOCK */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
@@ -39,7 +39,8 @@ body {
     position: relative; 
     width: 580px; height: 580px; 
     transform: scale(0.42); 
-    background-color: #000;
+    /* Changed to transparent so it doesn't block the prize */
+    background-color: transparent; 
     border: 10px solid var(--action-green);
     border-radius: 30px;
     box-shadow: 0 0 30px var(--action-green);
@@ -47,29 +48,33 @@ body {
     overflow: hidden; 
 }
 
-/* 3D PRIZE REVEAL: Point this file to your 360 rotation gif */
+/* 3D PRIZE REVEAL: FORCED TO FRONT */
 #prize { 
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%; 
-    background: url('prize-reveal.gif') no-repeat center center;
-    background-size: cover;
+    /* Using !important to override any other styles */
+    background-image: url('prize-reveal.gif') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-color: #000; /* Fallback color */
     z-index: 1; 
     animation: stadium-flare 3s linear infinite;
 }
 
-/* Commercial-style lighting sheen */
 @keyframes stadium-flare {
-    0% { filter: brightness(1) contrast(1); }
-    50% { filter: brightness(1.2) contrast(1.2) saturate(1.1); }
-    100% { filter: brightness(1) contrast(1); }
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+    100% { filter: brightness(1); }
 }
 
 #scratch-canvas { 
     position: absolute; 
     top: 0; left: 0; 
     width: 100%; height: 100%;
-    z-index: 2; 
+    z-index: 5; /* Higher than the prize */
+    cursor: crosshair;
 }
 
 /* NEON GLOWING TEXT */
@@ -85,11 +90,10 @@ body {
 }
 
 @keyframes pulsate {
-    0% { opacity: 0.8; text-shadow: 0 0 10px var(--action-green); }
-    100% { opacity: 1; text-shadow: 0 0 25px var(--action-green), 0 0 5px #fff; }
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
 }
 
-/* RAISED CLAIM BUTTON: Sitting 5% higher as requested */
 #claim-section {
     display: none; 
     margin-top: -85px; 
@@ -100,5 +104,4 @@ body {
 #claim-button img { 
     width: 200px !important; 
     height: auto; 
-    filter: drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
 }
