@@ -58,7 +58,6 @@ body {
     animation: stadium-flare 3s linear infinite;
 }
 
-/* Light pulsing effect for the win reveal */
 @keyframes stadium-flare {
     0% { filter: brightness(1) saturate(1); }
     50% { filter: brightness(1.3) saturate(1.2); }
@@ -89,10 +88,10 @@ body {
     100% { opacity: 1; text-shadow: 0 0 25px var(--action-green), 0 0 5px #fff; }
 }
 
-/* RAISED CLAIM BUTTON: Positioned for easy thumb access */
+/* RAISED CLAIM BUTTON: Raised by an additional 5% */
 #claim-section {
     display: none; 
-    margin-top: -55px; /* Pulls button UP toward the box */
+    margin-top: -85px; /* Director's Update: Pulled up by 5% additional */
     z-index: 200;
     text-align: center;
 }
