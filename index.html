@@ -25,7 +25,7 @@
     </div>
 
     <script>
-        // HARD LOCK: Disables all page swiping/bouncing
+        // TOTAL LOCKDOWN: Disables browser-level navigation gestures
         document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
         const canvas = document.getElementById('scratch-canvas');
@@ -44,10 +44,10 @@
             
             if ((clear / (580 * 580)) > 0.55) {
                 canvas.style.opacity = '0';
-                instruction.style.display = 'none'; // Clear space for button
+                instruction.style.display = 'none';
                 setTimeout(() => {
                     canvas.style.display = 'none';
-                    claimSection.style.display = 'block'; // Show the button raised up
+                    claimSection.style.display = 'block';
                 }, 300);
             }
         }
