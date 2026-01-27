@@ -4,98 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Seahawks Super Bowl LX Edition</title>
-    <style>
-        :root {
-            --seahawks-navy: #002244;
-            --action-green: #69BE28;
-            --wolf-grey: #A5ACAF;
-        }
-
-        body { 
-            /* Added background.png tag logic */
-            background: url('background.png') no-repeat center center fixed; 
-            background-size: cover;
-            margin: 0; 
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            touch-action: none; 
-            font-family: 'Arial Black', sans-serif;
-            color: white;
-        }
-
-        /* The Helmet Overlay */
-        #helmet-header {
-            width: 45%; 
-            max-width: 180px; 
-            min-width: 130px;
-            height: auto;
-            margin-bottom: -25px; 
-            z-index: 10;
-            filter: drop-shadow(0 0 10px var(--action-green));
-        }
-
-        /* The Game Box */
-        .container { 
-            position: relative; 
-            width: 580px; 
-            height: 580px; 
-            transform: scale(0.55); 
-            background-color: #000;
-            border: 8px solid var(--action-green);
-            border-radius: 25px;
-            box-shadow: 0 0 30px var(--action-green);
-            z-index: 5;
-        }
-
-        #prize { 
-            width: 100%; height: 100%; 
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            background-position: center; 
-            border-radius: 15px;
-        }
-
-        #scratch-canvas { 
-            position: absolute; 
-            top: 0; left: 0; z-index: 2; 
-            cursor: crosshair;
-            transition: opacity 0.8s ease; 
-            border-radius: 15px;
-        }
-
-        .neon-text {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            font-style: italic;
-            margin-top: -40px; 
-            text-shadow: 0 0 15px var(--action-green);
-            animation: pulsate 1.5s infinite alternate;
-        }
-
-        /* The Claim Section (Hidden by default) */
-        #claim-section {
-            display: none; 
-            z-index: 20;
-            margin-top: 10px;
-        }
-
-        #claim-button img {
-            width: 280px;
-            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
-        }
-
-        @keyframes pulsate {
-            100% { text-shadow: 0 0 20px var(--action-green), 0 0 30px #fff; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1 style="margin-bottom: 5px; font-size: 1.2rem; color: var(--wolf-grey); letter-spacing: 2px; text-shadow: 2px 2px 4px #000;">
+    <h1 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--wolf-grey); letter-spacing: 2px; text-shadow: 2px 2px 4px #000;">
         SUPER BOWL LX CHAMPIONS
     </h1>
 
@@ -151,7 +64,6 @@
             let clear = 0;
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
             
-            // If 60% cleared, show the prize button
             if ((clear / (580 * 580)) > 0.6 && !isFinished) {
                 isFinished = true;
                 canvas.style.opacity = '0';
