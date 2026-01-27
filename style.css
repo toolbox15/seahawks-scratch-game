@@ -1,84 +1,89 @@
-/* Seahawks Design System - Super Bowl LX Edition */
+/* Seahawks Digital Architecture - Super Bowl LX Edition */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
     --wolf-grey: #A5ACAF;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--seahawks-navy);
-    font-family: 'Arial Black', sans-serif;
+body { 
+    /* 1. Background Logic: Perfect fit for all phone sizes */
+    background: url('background.png') no-repeat center center fixed; 
+    background-size: cover; /* Ensures the image fills the screen without stretching */
+    
+    /* 2. Dynamic Viewport Height: Prevents "Too Large" issues on mobile browsers */
+    height: 100dvh; 
+    width: 100vw;
+    
+    margin: 0; 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     overflow: hidden;
+    touch-action: none; 
+    font-family: 'Arial Black', sans-serif;
     color: white;
 }
 
-/* Responsive Helmet Positioning */
+/* Helmet Overlay: Layered 3D Effect */
 #helmet-header {
     width: 45%; 
     max-width: 180px; 
     min-width: 130px;
     height: auto;
-    margin-bottom: -15px; /* Slight overlap with the box for a 3D effect */
+    margin-bottom: -25px; /* Creates the overlap with the game box */
     z-index: 10;
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
-#game-container {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    border: 4px solid var(--action-green);
-    border-radius: 20px;
-    box-shadow: 0 0 20px var(--action-green);
+/* The Game Container: High-Res 580px scaled for Mobile */
+.container { 
+    position: relative; 
+    width: 580px; 
+    height: 580px; 
+    transform: scale(0.55); /* Fits the large canvas into the mobile screen width */
+    background-color: #000;
+    border: 8px solid var(--action-green);
+    border-radius: 25px;
+    box-shadow: 0 0 30px var(--action-green);
     z-index: 5;
-    background: #000;
 }
 
-/* The Prize Image (Underneath) */
-#prize {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    object-fit: cover;
-}
-
-/* The Scratch Surface (On Top) */
-#scratch-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-    touch-action: none;
+#prize { 
+    width: 100%; height: 100%; 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; 
     border-radius: 15px;
 }
 
-/* Pulsating Neon Text */
+#scratch-canvas { 
+    position: absolute; 
+    top: 0; left: 0; z-index: 2; 
+    cursor: crosshair;
+    transition: opacity 0.8s ease; 
+    border-radius: 15px;
+}
+
+/* Typography & Animations */
 .neon-text {
-    font-size: 2rem;
-    color: #fff;
+    font-size: 2.5rem;
     text-transform: uppercase;
     font-style: italic;
-    margin-top: 20px;
-    text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
+    margin-top: -40px; 
+    text-shadow: 0 0 15px var(--action-green);
     animation: pulsate 1.5s infinite alternate;
 }
 
 @keyframes pulsate {
-    100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; }
+    100% { text-shadow: 0 0 20px var(--action-green), 0 0 30px #fff; }
 }
 
-/* Hidden Claim Button */
+/* Hidden Claim Button Section */
 #claim-section {
-    display: none;
-    margin-top: 20px;
+    display: none; 
+    z-index: 20;
+    margin-top: 10px;
     text-align: center;
 }
 
