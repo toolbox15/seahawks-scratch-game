@@ -3,79 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seahawks Super Bowl LX Scratch-Off</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Seahawks Super Bowl LX Edition</title>
+    <style>
+        :root {
+            --seahawks-navy: #002244;
+            --action-green: #69BE28;
+            --wolf-grey: #A5ACAF;
+        }
+
+        body { 
+            background-color: var(--seahawks-navy);
+            margin: 0; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: none; 
+            font-family: 'Arial Black', sans-serif;
+            color: white;
+        }
+
+        /* The Helmet: Nice size, responsive, and glowing */
+        #helmet-header {
+            width: 45%; 
+            max-width: 180px; 
+            min-width: 130px;
+            height: auto;
+            margin-bottom: -25px; /* Pulls it down to overlap the box */
+            z-index: 10;
+            filter: drop-shadow(0 0 10px var(--action-green));
+        }
+
+        /* The Game Box */
+        .container { 
+            position: relative; 
+            width: 580px; 
+            height: 580px; 
+            transform: scale(0.55); /* Scaled down for mobile viewports */
+            background-color: #000;
+            border: 8px solid var(--action-green);
+            border-radius: 25px;
+            box-shadow: 0 0 30px var(--action-green);
+            z-index: 5;
+        }
+
+        #ig-link {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        #prize { 
+            width: 100%; height: 100%; 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-position: center; 
+            border-radius: 15px;
+        }
+
+        #scratch-canvas { 
+            position: absolute; 
+            top: 0; left: 0; z-index: 2; 
+            cursor: crosshair;
+            transition: opacity 0.8s ease; 
+            border-radius: 15px;
+        }
+
+        .neon-text {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            font-style: italic;
+            margin-top: -40px; /* Adjusted due to container scale */
+            text-shadow: 0 0 15px var(--action-green);
+            animation: pulsate 1.5s infinite alternate;
+        }
+
+        @keyframes pulsate {
+            100% { text-shadow: 0 0 20px var(--action-green), 0 0 30px #fff; }
+        }
+    </style>
 </head>
 <body>
 
-    <h1 style="margin-bottom: 5px; font-size: 1.1rem; color: var(--wolf-grey); letter-spacing: 1px;">
-        SUPER BOWL LX EDITION
+    <h1 style="margin-bottom: 5px; font-size: 1.2rem; color: var(--wolf-grey); letter-spacing: 2px;">
+        SUPER BOWL LX CHAMPIONS
     </h1>
 
     <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
 
-    <div id="game-container">
-        <img id="prize" src="seahawks_wings.gif" alt="Prize">
-        <canvas id="scratch-canvas" width="350" height="350"></canvas>
+    <div class="container" id="game-container">
+        <a id="ig-link" href="#" target="_blank">
+            <div id="prize"></div>
+        </a>
+        <canvas id="scratch-canvas" width="580" height="580"></canvas>
     </div>
 
     <div class="neon-text">Scratch to Win</div>
 
-    <div id="claim-section">
-        <a href="https://ig.me/m/theponychicago?text=I%20WON%20SEAHAWKS%20WINGS!" id="claim-button">
-            <img src="prize-button.png" alt="Claim Your Prize">
-        </a>
-    </div>
-
     <script>
+        const BAR_HANDLE = "theponychicago"; 
+        
+        const PRIZE_POOL = [
+            { img: './seahawks_wings.gif', msg: 'SEAHAWKS%20WINGS' },
+            { img: './jackpot_prize.gif', msg: 'SUPER%20BOWL%20JACKPOT' }
+        ];
+
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
-        const claimSection = document.getElementById('claim-section');
+        const prizeDiv = document.getElementById('prize');
+        const igLink = document.getElementById('ig-link');
+        
         let isDrawing = false;
+        let isFinished = false;
 
-        // Logic fix: ensure cover loads before interactions
+        // Randomize Prize
+        const picked = PRIZE_POOL[Math.floor(Math.random() * PRIZE_POOL.length)];
+        prizeDiv.style.backgroundImage = `url(${picked.img})`;
+        igLink.href = `https://ig.me/m/${BAR_HANDLE}?text=I%20WON%20${picked.msg}!`;
+
+        // Load Seahawks Cover
         const coverImg = new Image();
-        coverImg.src = 'seahawks-cover.png'; 
+        coverImg.src = './seahawks-cover.png';  
         coverImg.onload = () => {
-            ctx.drawImage(coverImg, 0, 0, 350, 350);
+            ctx.drawImage(coverImg, 0, 0, 580, 580);
         };
 
-        function scratch(e) {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-
+        function scratch(x, y) {
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.beginPath(); 
+            ctx.arc(x, y, 45, 0, Math.PI * 2); 
             ctx.fill();
-            checkScratchPercentage();
+            
+            // Percentage Trigger: 60%
+            const pixels = ctx.getImageData(0, 0, 580, 580).data;
+            let clear = 0;
+            for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
+            if ((clear / (580 * 580)) > 0.6 && !isFinished) {
+                isFinished = true;
+                canvas.style.opacity = '0';
+                igLink.style.pointerEvents = 'auto';
+            }
         }
 
-        function checkScratchPercentage() {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let clearedPixels = 0;
-            for (let i = 3; i < imageData.data.length; i += 4) {
-                if (imageData.data[i] === 0) clearedPixels++;
-            }
-            // Triggering the reveal at 60% as per your project specifications
-            if (clearedPixels / (canvas.width * canvas.height) > 0.6) {
-                canvas.style.transition = 'opacity 1s';
-                canvas.style.opacity = '0';
-                setTimeout(() => {
-                    canvas.style.display = 'none';
-                    claimSection.style.display = 'block';
-                }, 500);
-            }
-        }
+        // Mobile-friendly Interaction Logic
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing || isFinished) return;
+            const r = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / r.width;
+            const scaleY = canvas.height / r.height;
+            scratch((e.clientX - r.left) * scaleX, (e.clientY - r.top) * scaleY);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (isFinished) return;
+            e.preventDefault();
+            const r = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / r.width;
+            const scaleY = canvas.height / r.height;
+            scratch((e.touches[0].clientX - r.left) * scaleX, (e.touches[0].clientY - r.top) * scaleY);
+        }, { passive: false });
 
         canvas.addEventListener('mousedown', () => isDrawing = true);
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mousemove', scratch);
-        canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); });
+        window.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('touchstart', () => isDrawing = true);
         canvas.addEventListener('touchend', () => isDrawing = false);
-        canvas.addEventListener('touchmove', scratch);
     </script>
 </body>
 </html>
