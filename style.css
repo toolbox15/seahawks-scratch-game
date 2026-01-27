@@ -1,10 +1,10 @@
-/* DIRECTOR'S FINAL CUT: POSITION LOCK */
+/* DIRECTOR'S MASTER LOCK: STADIUM EDITION */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
 }
 
-/* HARD LOCK: Kills all scrolling and browser bounce */
+/* HARD LOCK: Zero movement on mobile */
 html, body {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
@@ -31,14 +31,14 @@ body {
 
 #helmet-header {
     width: 130px; height: auto;
-    margin-bottom: -35px; z-index: 60; /* Overlaps container */
+    margin-bottom: -35px; z-index: 60;
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
 .container { 
     position: relative; 
     width: 580px; height: 580px; 
-    transform: scale(0.42); /* Scaled slightly smaller to make room for button */
+    transform: scale(0.42); 
     background-color: #000;
     border: 10px solid var(--action-green);
     border-radius: 30px;
@@ -47,7 +47,7 @@ body {
     overflow: hidden; 
 }
 
-/* PRIZE FIX: Guaranteed visibility */
+/* PRIZE: Stadium Cinematic Reveal */
 #prize { 
     position: absolute;
     top: 0; left: 0;
@@ -55,6 +55,14 @@ body {
     background: url('seahawks_wings.gif') no-repeat center center;
     background-size: cover;
     z-index: 1; 
+    animation: stadium-flare 3s linear infinite;
+}
+
+/* Light pulsing effect for the win reveal */
+@keyframes stadium-flare {
+    0% { filter: brightness(1) saturate(1); }
+    50% { filter: brightness(1.3) saturate(1.2); }
+    100% { filter: brightness(1) saturate(1); }
 }
 
 #scratch-canvas { 
@@ -64,7 +72,7 @@ body {
     z-index: 2; 
 }
 
-/* GLOWING TEXT: Positioned directly under box */
+/* NEON GLOWING TEXT */
 .neon-text {
     font-size: 2rem;
     color: #fff;
@@ -81,10 +89,10 @@ body {
     100% { opacity: 1; text-shadow: 0 0 25px var(--action-green), 0 0 5px #fff; }
 }
 
-/* CLAIM BUTTON: Raised up to be clearly visible */
+/* RAISED CLAIM BUTTON: Positioned for easy thumb access */
 #claim-section {
     display: none; 
-    margin-top: -50px; /* Pulls button UP toward the scratch box */
+    margin-top: -55px; /* Pulls button UP toward the box */
     z-index: 200;
     text-align: center;
 }
