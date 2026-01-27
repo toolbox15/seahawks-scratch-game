@@ -12,7 +12,7 @@
     <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
 
     <div class="container">
-        <div id="prize" style="width:100%; height:100%; background:url('seahawks_wings.gif') center/cover;"></div>
+        <div id="prize"></div>
         <canvas id="scratch-canvas" width="580" height="580"></canvas>
     </div>
 
@@ -41,7 +41,7 @@
             
             if ((clear / (580 * 580)) > 0.6) {
                 canvas.style.opacity = '0';
-                instruction.style.display = 'none'; // Clear space for button
+                instruction.style.display = 'none'; 
                 setTimeout(() => {
                     canvas.style.display = 'none';
                     claimSection.style.display = 'block';
@@ -49,7 +49,6 @@
             }
         }
 
-        // Touch handling with background lock
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const r = canvas.getBoundingClientRect();
