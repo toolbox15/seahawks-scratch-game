@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <h1 style="font-size: 1rem; color: var(--wolf-grey); margin-bottom: 5px;">SUPER BOWL LX</h1>
+    <h1 style="font-size: 0.9rem; color: var(--wolf-grey); margin-bottom: 2px;">SUPER BOWL LX</h1>
 
     <img id="helmet-header" src="helmet.png">
 
@@ -32,11 +32,9 @@
         const claimSection = document.getElementById('claim-section');
         const igLink = document.getElementById('ig-link');
 
-        // Set the prize image (The chicken/wings gif)
         prizeDiv.style.backgroundImage = "url('seahawks_wings.gif')";
         igLink.href = "https://ig.me/m/theponychicago?text=I%20WON%20WINGS!";
 
-        // Draw the cover
         const coverImg = new Image();
         coverImg.src = 'seahawks-cover.png';
         coverImg.onload = () => {
@@ -58,10 +56,12 @@
                 setTimeout(() => {
                     canvas.style.display = 'none';
                     claimSection.style.display = 'block';
-                }, 400);
+                }, 300);
             }
         }
 
+        // CRITICAL: Stop the background from moving during touch
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
         canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const r = canvas.getBoundingClientRect();
@@ -70,9 +70,9 @@
             scratch((e.touches[0].clientX - r.left) * scaleX, (e.touches[0].clientY - r.top) * scaleY);
         }, { passive: false });
         
-        // Mouse support for testing
+        // Mouse testing
         let mDown = false;
-        canvas.onmousedown = () => mDown = true;
+        canvas.onmousedown = (e) => { mDown = true; e.preventDefault(); };
         window.onmouseup = () => mDown = false;
         canvas.onmousemove = (e) => {
             if(!mDown) return;
