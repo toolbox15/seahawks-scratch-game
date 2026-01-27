@@ -1,17 +1,16 @@
-/* Seahawks Architecture - Locked & Scaled */
+/* Seahawks Architecture - BIG GAME DAY Edition */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
     --wolf-grey: #A5ACAF;
 }
 
-/* LOCK THE BACKGROUND */
+/* 1. VIEWPORT LOCK: Stops background movement and "bounce" */
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    /* Prevents the "bounce" and scrolling on iPhones */
+    width: 100vw;
+    height: 100dvh;
     overflow: hidden; 
     position: fixed; 
 }
@@ -26,20 +25,31 @@ body {
     font-family: 'Arial Black', sans-serif;
 }
 
+/* 2. HEADER: Big Game Day LX */
+.main-header {
+    font-size: 1.8rem;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
+    margin-bottom: 0px;
+    z-index: 20;
+}
+
 #helmet-header {
-    width: 140px; /* Sized down slightly for better fit */
+    width: 140px; 
     height: auto;
     margin-bottom: -35px; 
     z-index: 10;
     filter: drop-shadow(0 0 10px var(--action-green));
 }
 
+/* 3. GAME CONTAINER: Locked scaling */
 .container { 
     position: relative; 
     width: 580px; 
     height: 580px; 
-    /* This makes the 580px box fit on a 375px phone screen */
-    transform: scale(0.45); 
+    transform: scale(0.48); /* Balanced for most phone sizes */
     background-color: #000;
     border: 10px solid var(--action-green);
     border-radius: 30px;
@@ -48,39 +58,33 @@ body {
     overflow: hidden; 
 }
 
-#prize { 
-    width: 100%; height: 100%; 
-    background-size: cover; 
-    background-position: center; 
-}
-
 #scratch-canvas { 
     position: absolute; 
     top: 0; left: 0; 
+    width: 100%; height: 100%;
     z-index: 2; 
-    /* Ensures the cover stays inside the box */
-    width: 100%;
-    height: 100%;
 }
 
 .neon-text {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #fff;
     text-transform: uppercase;
-    margin-top: -60px; /* Moves text up so the button has room */
+    margin-top: -50px; 
     text-shadow: 0 0 15px var(--action-green);
 }
 
-/* BUTTON SIZE FIX */
+/* 4. CLAIM BUTTON: Size locked to prevent "too big" error */
 #claim-section {
     display: none; 
-    z-index: 20;
-    margin-top: -10px;
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
 }
 
 #claim-button img {
-    /* Hard limit so it never looks too big on any phone */
-    width: 180px; 
+    width: 180px !important; 
     height: auto;
-    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+    filter: drop-shadow(0px 4px 10px rgba(0,0,0,0.8));
 }
