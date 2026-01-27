@@ -1,133 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rams Champions Edition</title>
-    <style>
-        :root {
-            --rams-blue: #003594;
-            --rams-gold: #FFD100;
-        }
+/* Seahawks Design System - Super Bowl LX Edition */
+:root {
+    --seahawks-navy: #002244;
+    --action-green: #69BE28;
+    --wolf-grey: #A5ACAF;
+}
 
-        body { 
-            background: url('./background.jpg') no-repeat center center fixed; 
-            background-size: cover;
-            margin: 0; 
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            touch-action: none; 
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--seahawks-navy);
+    font-family: 'Arial Black', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
 
-        /* This container aligns with the gray box in your background image */
-        .container { 
-            position: relative; 
-            width: 580px; 
-            height: 580px; 
-            /* If it looks off-center on mobile, we can use a scale transform */
-            transform: scale(0.6); 
-            background-color: #000;
-            border-radius: 12px;
-        }
+/* Responsive Helmet Positioning */
+#helmet-header {
+    width: 45%; 
+    max-width: 180px; 
+    min-width: 130px;
+    height: auto;
+    margin-bottom: -15px; /* Slight overlap with the box for a 3D effect */
+    z-index: 10;
+    filter: drop-shadow(0 0 10px var(--action-green));
+}
 
-        #ig-link {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none;
-        }
+#game-container {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    border: 4px solid var(--action-green);
+    border-radius: 20px;
+    box-shadow: 0 0 20px var(--action-green);
+    z-index: 5;
+    background: #000;
+}
 
-        #prize { 
-            width: 100%; height: 100%; 
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: center; 
-        }
+/* The Prize Image (Underneath) */
+#prize {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+}
 
-        #scratch-canvas { 
-            position: absolute; 
-            top: 0; left: 0; z-index: 2; 
-            cursor: crosshair;
-            transition: opacity 0.8s ease; 
-        }
-    </style>
-</head>
-<body>
+/* The Scratch Surface (On Top) */
+#scratch-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    touch-action: none;
+    border-radius: 15px;
+}
 
-    <div class="container" id="game-container">
-        <a id="ig-link" href="#" target="_blank">
-            <div id="prize"></div>
-        </a>
-        <canvas id="scratch-canvas" width="580" height="580"></canvas>
-    </div>
+/* Pulsating Neon Text */
+.neon-text {
+    font-size: 2rem;
+    color: #fff;
+    text-transform: uppercase;
+    font-style: italic;
+    margin-top: 20px;
+    text-shadow: 0 0 10px var(--action-green), 0 0 20px var(--action-green);
+    animation: pulsate 1.5s infinite alternate;
+}
 
-    <script>
-        const BAR_HANDLE = "theponychicago"; 
-        
-        const PRIZE_POOL = [
-            { img: './wings_prize.gif', msg: 'FREE%20WINGS' },
-            { img: './jackpot_prize.gif', msg: 'GOLDEN%20RAM' }
-        ];
+@keyframes pulsate {
+    100% { text-shadow: 0 0 15px var(--action-green), 0 0 30px var(--action-green), 0 0 45px #fff; }
+}
 
-        const canvas = document.getElementById('scratch-canvas');
-        const ctx = canvas.getContext('2d');
-        const prizeDiv = document.getElementById('prize');
-        const igLink = document.getElementById('ig-link');
-        
-        let isDrawing = false;
-        let isFinished = false;
+/* Hidden Claim Button */
+#claim-section {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
 
-        const picked = PRIZE_POOL[Math.floor(Math.random() * PRIZE_POOL.length)];
-        prizeDiv.style.backgroundImage = `url(${picked.img})`;
-        igLink.href = `https://ig.me/m/${BAR_HANDLE}?text=I%20WON%20${picked.msg}!`;
+#claim-button img {
+    width: 280px;
+    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+    transition: transform 0.1s;
+}
 
-        const coverImg = new Image();
-        coverImg.src = './rams cover.jpg';  
-        coverImg.onload = () => {
-            ctx.drawImage(coverImg, 0, 0, 580, 580);
-        };
-
-        function scratch(x, y) {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); 
-            ctx.arc(x, y, 40, 0, Math.PI * 2); // Larger brush for 580px area
-            ctx.fill();
-            
-            // Check progress
-            const pixels = ctx.getImageData(0, 0, 580, 580).data;
-            let clear = 0;
-            for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
-            if ((clear / (580 * 580)) > 0.6 && !isFinished) {
-                isFinished = true;
-                canvas.style.opacity = '0';
-                igLink.style.pointerEvents = 'auto';
-            }
-        }
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing || isFinished) return;
-            const r = canvas.getBoundingClientRect();
-            // Calculate scale if container is scaled
-            const scaleX = canvas.width / r.width;
-            const scaleY = canvas.height / r.height;
-            scratch((e.clientX - r.left) * scaleX, (e.clientY - r.top) * scaleY);
-        });
-
-        canvas.addEventListener('touchmove', (e) => {
-            if (isFinished) return;
-            e.preventDefault();
-            const r = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / r.width;
-            const scaleY = canvas.height / r.height;
-            scratch((e.touches[0].clientX - r.left) * scaleX, (e.touches[0].clientY - r.top) * scaleY);
-        }, { passive: false });
-
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        window.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('touchstart', () => isDrawing = true);
-        canvas.addEventListener('touchend', () => isDrawing = false);
-    </script>
-</body>
-</html>
+#claim-button:active img { transform: scale(0.95); }
