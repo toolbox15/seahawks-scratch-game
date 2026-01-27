@@ -25,7 +25,7 @@
     </div>
 
     <script>
-        // TOTAL LOCKDOWN: Disables browser-level navigation gestures
+        // TOTAL LOCKDOWN: Disables browser navigation/bounce
         document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
         const canvas = document.getElementById('scratch-canvas');
