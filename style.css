@@ -1,4 +1,4 @@
-/* DIRECTOR'S FINAL CUT: ZERO-JERK STABILIZATION */
+/* DIRECTOR'S FINAL CUT: SPACING & POSITION LOCK */
 :root {
     --seahawks-navy: #002244;
     --action-green: #69BE28;
@@ -19,19 +19,42 @@ body {
     align-items: center; justify-content: center;
 }
 
-/* CONTAINER LOCK: Fixed dimensions to prevent shifting */
+/* HEADER: Pinned to top */
+.main-header {
+    position: absolute;
+    top: 6%;
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    z-index: 50;
+    text-shadow: 2px 2px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
+}
+
+/* HELMET: Raised to create space below it */
+#helmet-header {
+    position: absolute;
+    top: 13%; 
+    width: 120px; 
+    height: auto;
+    z-index: 60;
+    filter: drop-shadow(0 0 10px var(--action-green));
+}
+
+/* CONTAINER: Pushed down to clear the helmet */
 .container { 
-    position: relative; 
+    position: absolute; 
+    top: 48%; /* Centered vertically with space above */
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.42); 
     width: 580px; height: 580px; 
-    transform: scale(0.42); 
     background-color: #000; 
     border: 10px solid var(--action-green);
     border-radius: 30px;
+    box-shadow: 0 0 30px var(--action-green);
     z-index: 10;
     overflow: hidden;
-    /* Prevents any layout shifting during scaling */
     backface-visibility: hidden;
-    transform-origin: center center;
 }
 
 #prize { 
@@ -49,11 +72,11 @@ body {
     z-index: 5;
 }
 
-/* POSITION LOCK: Fixed placement for neon text */
+/* NEON TEXT: Pinned below the container */
 .neon-text {
     position: absolute;
-    top: 72%; /* Locked position relative to screen height */
-    font-size: 2rem;
+    bottom: 18%; 
+    font-size: 1.8rem;
     color: #fff;
     text-transform: uppercase;
     font-style: italic;
@@ -62,15 +85,14 @@ body {
     z-index: 100;
 }
 
-/* BUTTON LOCK: Uses absolute positioning to prevent page jerking */
+/* BUTTON: Replaces the text exactly */
 #claim-section {
     display: none; 
     position: absolute;
-    top: 72%; /* Same spot as the text it replaces */
+    bottom: 18%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 200;
-    text-align: center;
 }
 
 #claim-button img { 
