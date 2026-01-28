@@ -1,107 +1,65 @@
-/* DIRECTOR'S FINAL CUT: SPACING & POSITION LOCK */
-:root {
-    --seahawks-navy: #002244;
-    --action-green: #69BE28;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body scroll="no">
 
-html, body {
-    margin: 0; padding: 0;
-    width: 100vw; height: 100dvh;
-    overflow: hidden !important; 
-    position: fixed; 
-    touch-action: none;
-}
+    <h1 class="main-header">BIG GAME DAY LX</h1>
 
-body { 
-    background: url('background.png') no-repeat center center; 
-    background-size: cover;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-}
+    <img id="helmet-header" src="helmet.png">
 
-/* HEADER: Pinned to top */
-.main-header {
-    position: absolute;
-    top: 6%;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
-    text-transform: uppercase;
-    font-size: 1.6rem;
-    z-index: 50;
-    text-shadow: 2px 2px 0px var(--seahawks-navy), 0 0 10px var(--action-green);
-}
+    <div class="container" id="game-box">
+        <div id="prize"></div>
+        <canvas id="scratch-canvas" width="580" height="580"></canvas>
+    </div>
 
-/* HELMET: Raised to create space below it */
-#helmet-header {
-    position: absolute;
-    top: 13%; 
-    width: 120px; 
-    height: auto;
-    z-index: 60;
-    filter: drop-shadow(0 0 10px var(--action-green));
-}
+    <div id="instruction-text" class="neon-text">Scratch to Win</div>
 
-/* CONTAINER: Pushed down to clear the helmet */
-.container { 
-    position: absolute; 
-    top: 48%; /* Centered vertically with space above */
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.42); 
-    width: 580px; height: 580px; 
-    background-color: #000; 
-    border: 10px solid var(--action-green);
-    border-radius: 30px;
-    box-shadow: 0 0 30px var(--action-green);
-    z-index: 10;
-    overflow: hidden;
-    backface-visibility: hidden;
-}
+    <div id="claim-section">
+        <a href="https://ig.me/m/theponychicago?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
+            <img src="prize-button.png">
+        </a>
+    </div>
 
-#prize { 
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%; 
-    background: url('prize-reveal.gif') no-repeat center center;
-    background-size: cover;
-    z-index: 1; 
-}
+    <script>
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
-#scratch-canvas { 
-    position: absolute; 
-    top: 0; left: 0; 
-    z-index: 5;
-}
+        const canvas = document.getElementById('scratch-canvas');
+        const ctx = canvas.getContext('2d');
+        const claimSection = document.getElementById('claim-section');
+        const instruction = document.getElementById('instruction-text');
 
-/* NEON TEXT: Pinned below the container */
-.neon-text {
-    position: absolute;
-    bottom: 18%; 
-    font-size: 1.8rem;
-    color: #fff;
-    text-transform: uppercase;
-    font-style: italic;
-    text-shadow: 0 0 15px var(--action-green);
-    animation: pulsate 1.2s infinite alternate;
-    z-index: 100;
-}
+        const coverImg = new Image();
+        coverImg.src = 'seahawks-cover.png';
+        coverImg.onload = () => ctx.drawImage(coverImg, 0, 0, 580, 580);
 
-/* BUTTON: Replaces the text exactly */
-#claim-section {
-    display: none; 
-    position: absolute;
-    bottom: 18%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 200;
-}
+        function checkProgress() {
+            const pixels = ctx.getImageData(0, 0, 580, 580).data;
+            let clear = 0;
+            for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
+            
+            if ((clear / (pixels.length / 4)) > 0.50) {
+                canvas.style.transition = "opacity 0.4s ease";
+                canvas.style.opacity = '0';
+                setTimeout(() => {
+                    canvas.style.display = 'none';
+                    instruction.style.display = 'none';
+                    claimSection.style.display = 'block';
+                }, 300);
+            }
+        }
 
-#claim-button img { 
-    width: 200px !important; 
-    height: auto; 
-    filter: drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
-}
-
-@keyframes pulsate {
-    0% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
+        canvas.addEventListener('touchmove', (e) => {
+            const r = canvas.getBoundingClientRect();
+            const x = (e.touches[0].clientX - r.left) * (580 / r.width);
+            const y = (e.touches[0].clientY - r.top) * (580 / r.height);
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(x, y, 65, 0, Math.PI * 2); ctx.fill();
+            checkProgress();
+        }, { passive: false });
+    </script>
+</body>
+</html>
