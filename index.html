@@ -39,7 +39,6 @@
             margin: 10px auto; 
             width: 280px; 
             height: 280px; 
-            /* Fallback color if image fails */
             background-color: #01162b; 
             border: 2px solid #69be28;
             border-radius: 12px;
@@ -56,7 +55,6 @@
             touch-action: none; 
             width: 100%; 
             height: 100%; 
-            /* Ensure the canvas doesn't have a background color hiding the prize */
             background: transparent !important;
         }
 
@@ -67,8 +65,8 @@
             width: 100%; 
             height: 100%; 
             z-index: 5; 
-            /* Forces the prize image to the back layer */
-            background-image: url('prize.png'); 
+            /* Updated to match your GitHub file: prize-reveal.gif */
+            background-image: url('prize-reveal.gif'); 
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -103,7 +101,6 @@
     <img id="helmet-header" src="helmet.png" alt="Helmet">
 
     <div class="container" id="game-box">
-        <!-- The prize sits behind the canvas -->
         <div id="prize"></div>
         <canvas id="scratch-canvas" width="560" height="560"></canvas>
     </div>
@@ -125,26 +122,25 @@
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
-        // Draw the initial mask (Navy blue) while the image loads
+        // Safety mask
         ctx.fillStyle = '#002244';
         ctx.fillRect(0, 0, 560, 560);
 
         const coverImg = new Image();
         coverImg.crossOrigin = "anonymous";
-        // Ensure this filename matches exactly on GitHub (lowercase/extensions)
-        coverImg.src = 'seahawks-cover.jpg'; 
+        
+        // Updated to match your GitHub file: background.png
+        coverImg.src = 'background.png'; 
 
         coverImg.onload = () => {
-            // Clear the navy rectangle and draw the actual cover image
             ctx.clearRect(0, 0, 560, 560);
             ctx.globalCompositeOperation = 'source-over';
             ctx.drawImage(coverImg, 0, 0, 560, 560);
         };
 
         coverImg.onerror = () => {
-            // Fallback to .png if .jpg is not found
-            if (!coverImg.src.includes('.png')) {
-                console.log("JPG failed, trying PNG...");
+            // Secondary fallback if background.png fails, try seahawks-cover.png
+            if (!coverImg.src.includes('seahawks-cover.png')) {
                 coverImg.src = 'seahawks-cover.png';
             }
         };
@@ -168,8 +164,7 @@
                     }, 500);
                 }
             } catch (e) {
-                // Fail-safe for security/CORS issues
-                console.warn("Canvas check failed - revealing on interaction.");
+                console.warn("Canvas check failed.");
             }
         }
 
