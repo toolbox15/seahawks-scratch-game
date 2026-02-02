@@ -8,6 +8,11 @@
         body { 
             margin: 0; 
             padding: 0; 
+            /* LAYER 1: The Base Background */
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             background-color: #002244; 
             overflow: hidden; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
@@ -15,16 +20,31 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
         }
 
+        /* LAYER 2: Semi-transparent overlay for readability */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 34, 68, 0.65);
+            z-index: -1; /* Sits behind content but in front of body background-image */
+        }
+
+        /* LAYER 3: All content elements */
         .main-header { 
             text-align: center; 
-            margin-top: 7px; /* Clear phone frame */
-            font-size: 22px; 
+            margin-top: 10px;
+            font-size: 24px; 
             font-weight: 900;
-            text-shadow: 0 0 10px #69be28;
+            text-shadow: 0 0 15px rgba(105, 190, 40, 0.6);
             letter-spacing: -1px;
             text-transform: uppercase;
+            position: relative;
+            z-index: 10;
         }
 
         #helmet-header { 
@@ -32,6 +52,8 @@
             margin: 5px auto; 
             width: 65px; 
             height: auto;
+            position: relative;
+            z-index: 10;
         }
 
         .container { 
@@ -39,22 +61,20 @@
             margin: 10px auto; 
             width: 280px; 
             height: 280px; 
-            /* LAYER 1: The Stadium Background (At the very bottom) */
-            background-image: url('background.png'); 
-            background-size: cover;
-            background-position: center;
+            background: rgba(0, 34, 68, 0.5); 
             border: 2px solid #69be28;
             border-radius: 12px;
-            box-shadow: 0 0 20px rgba(105, 190, 40, 0.3);
+            box-shadow: 0 0 25px rgba(105, 190, 40, 0.4);
             overflow: hidden;
-            visibility: hidden; /* Hidden until cover loads to prevent prize-leaking */
+            visibility: hidden; /* Hidden until foil loads */
+            z-index: 10;
         }
 
         #scratch-canvas { 
             position: absolute; 
             top: 0; 
             left: 0; 
-            z-index: 10; /* LAYER 3: The Silver Football (Top layer to scratch) */
+            z-index: 12; /* Top layer of the scratch box */
             cursor: crosshair; 
             touch-action: none; 
             width: 100%; 
@@ -68,7 +88,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            z-index: 5; /* LAYER 2: The Wings (Revealed underneath) */
+            z-index: 11; /* Revealed layer */
             background-image: url('prize-reveal.gif'); 
             background-position: center;
             background-size: contain;
@@ -79,16 +99,20 @@
             text-align: center; 
             color: #69be28; 
             font-weight: bold; 
-            margin-top: 8px;
+            margin-top: 10px;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: 14px;
             letter-spacing: 2px;
+            position: relative;
+            z-index: 10;
         }
 
         #claim-section { 
             display: none; 
             text-align: center; 
             margin-top: 12px; 
+            position: relative;
+            z-index: 20;
         }
 
         #claim-button img { 
@@ -125,20 +149,18 @@
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
-        // Immediate solid filler to hide prize during slow network loads
+        // Immediate solid filler
         ctx.fillStyle = '#002244';
         ctx.fillRect(0, 0, 560, 560);
 
         const coverImg = new Image();
         coverImg.crossOrigin = "anonymous";
-        // The silver football foil from your repo
         coverImg.src = 'seahawks-cover.png'; 
 
         coverImg.onload = () => {
             ctx.clearRect(0, 0, 560, 560);
             ctx.globalCompositeOperation = 'source-over';
             ctx.drawImage(coverImg, 0, 0, 560, 560);
-            // Reveal container once the cover image is safely drawn on top of the prize
             gameBox.style.visibility = 'visible';
         };
 
