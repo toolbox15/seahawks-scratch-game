@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big Game Scratch | ScreenXcel</title>
     <style>
-        /* FULL SCREEN MOBILE OPTIMIZATION FOR INSTAGRAM BIO */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
             margin: 0; 
             padding: 0; 
-            /* LAYER 1: Full Background Stadium */
+            /* Stadium background covers the whole screen */
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
@@ -29,7 +28,6 @@
             position: relative;
         }
 
-        /* Dark overlay for contrast */
         body::before {
             content: "";
             position: absolute;
@@ -51,8 +49,8 @@
 
         .main-header { 
             text-align: center; 
-            margin: 0 0 10px 0;
-            font-size: 28px; 
+            margin: 0 0 5px 0;
+            font-size: 26px; 
             font-weight: 900;
             text-shadow: 0 0 20px rgba(105, 190, 40, 0.8);
             letter-spacing: -1px;
@@ -62,7 +60,7 @@
 
         #helmet-header { 
             display: block; 
-            margin-bottom: 20px; 
+            margin-bottom: 15px; 
             width: 85px; 
             height: auto;
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
@@ -109,9 +107,9 @@
             text-align: center; 
             color: #69be28; 
             font-weight: bold; 
-            margin-top: 20px;
+            margin-top: 15px;
             text-transform: uppercase;
-            font-size: 16px;
+            font-size: 15px;
             letter-spacing: 3px;
             text-shadow: 0 0 10px #69be28;
             animation: pulse 1.5s infinite;
@@ -126,13 +124,31 @@
         #claim-section { 
             display: none; 
             text-align: center; 
-            margin-top: 15px; 
+            margin-top: 10px; 
         }
 
         #claim-button img { 
-            width: 220px; 
+            width: 210px; 
             filter: drop-shadow(0 0 15px #69be28);
             transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .powered-by {
+            margin-top: 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .powered-by span {
+            color: #69be28;
+            text-shadow: 0 0 5px #69be28;
         }
 
         #claim-button:active img { transform: scale(0.95); }
@@ -153,10 +169,14 @@
         <div id="instruction-text" class="neon-text">SCRATCH TO WIN</div>
 
         <div id="claim-section">
-            <!-- Updated Instagram Hook -->
-            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
+            <!-- Added target="_blank" and rel="noopener" to prevent the "refused to connect" error -->
+            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button" target="_blank" rel="noopener noreferrer">
                 <img src="prize-button.png" alt="Claim Prize">
             </a>
+            
+            <div class="powered-by">
+                POWERED BY <span>SCREENXCEL</span>
+            </div>
         </div>
     </div>
 
@@ -196,7 +216,9 @@
                     setTimeout(() => {
                         canvas.style.display = 'none';
                         instruction.style.display = 'none';
-                        claimSection.style.display = 'block';
+                        claimSection.style.display = 'flex';
+                        claimSection.style.flexDirection = 'column';
+                        claimSection.style.alignItems = 'center';
                     }, 500);
                 }
             } catch (e) {
