@@ -3,72 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ScreenXcel | Big Game Day Scratch</title>
+    <title>Big Game Scratch | ScreenXcel</title>
     <style>
+        /* FULL SCREEN MOBILE OPTIMIZATION FOR INSTAGRAM BIO */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body { 
             margin: 0; 
             padding: 0; 
-            /* LAYER 1: The Base Background */
+            /* LAYER 1: Full Background Stadium */
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-color: #002244; 
             overflow: hidden; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
+            width: 100vw;
             position: relative;
-            z-index: 0;
         }
 
-        /* LAYER 2: Semi-transparent overlay for readability */
+        /* Dark overlay for contrast */
         body::before {
             content: "";
             position: absolute;
             inset: 0;
             background: rgba(0, 34, 68, 0.65);
-            z-index: -1;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
         }
 
         .main-header { 
             text-align: center; 
-            margin-top: 10px;
-            font-size: 24px; 
+            margin: 0 0 10px 0;
+            font-size: 28px; 
             font-weight: 900;
-            text-shadow: 0 0 15px rgba(105, 190, 40, 0.6);
+            text-shadow: 0 0 20px rgba(105, 190, 40, 0.8);
             letter-spacing: -1px;
             text-transform: uppercase;
-            position: relative;
-            z-index: 10;
+            font-style: italic;
         }
 
         #helmet-header { 
             display: block; 
-            margin: 5px auto; 
-            /* Increased size by 10 pixels (from 70px to 80px) */
-            width: 80px; 
+            margin-bottom: 20px; 
+            width: 85px; 
             height: auto;
-            position: relative;
-            z-index: 10;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         }
 
         .container { 
             position: relative; 
-            margin: 10px auto; 
             width: 275px; 
             height: 275px; 
-            background: rgba(0, 34, 68, 0.5); 
+            background: rgba(0, 34, 68, 0.8); 
             border: 3px solid #69be28;
-            border-radius: 12px;
-            /* Enhanced glow to mask the seam between canvas and box */
-            box-shadow: 0 0 25px 5px rgba(105, 190, 40, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(105, 190, 40, 0.5);
             overflow: hidden;
             visibility: hidden;
-            z-index: 10;
         }
 
         #scratch-canvas { 
@@ -92,56 +101,63 @@
             z-index: 11;
             background-image: url('prize-reveal.gif'); 
             background-position: center;
-            /* cover to ensure no edges show */
             background-size: cover; 
             background-repeat: no-repeat;
-            /* Subtle inner shadow to blend the prize with the stadium background */
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
         }
 
         .neon-text { 
             text-align: center; 
             color: #69be28; 
             font-weight: bold; 
-            margin-top: 10px;
+            margin-top: 20px;
             text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 10;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #69be28;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
         #claim-section { 
             display: none; 
             text-align: center; 
-            margin-top: 12px; 
-            position: relative;
-            z-index: 20;
+            margin-top: 15px; 
         }
 
         #claim-button img { 
-            width: 180px; 
+            width: 220px; 
+            filter: drop-shadow(0 0 15px #69be28);
             transition: transform 0.2s ease;
         }
+
+        #claim-button:active img { transform: scale(0.95); }
     </style>
 </head>
 <body scroll="no">
 
-    <h1 class="main-header">BIG GAME DAY LX</h1>
+    <div class="content-wrapper">
+        <h1 class="main-header">BIG GAME DAY LX</h1>
 
-    <img id="helmet-header" src="helmet.png" alt="Helmet">
+        <img id="helmet-header" src="helmet.png" alt="Helmet">
 
-    <div class="container" id="game-box">
-        <div id="prize"></div>
-        <canvas id="scratch-canvas" width="560" height="560"></canvas>
-    </div>
+        <div class="container" id="game-box">
+            <div id="prize"></div>
+            <canvas id="scratch-canvas" width="550" height="550"></canvas>
+        </div>
 
-    <div id="instruction-text" class="neon-text">Scratch to Win</div>
+        <div id="instruction-text" class="neon-text">SCRATCH TO WIN</div>
 
-    <div id="claim-section">
-        <a href="https://ig.me/m/theponychicago?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
-            <img src="prize-button.png" alt="Claim Prize">
-        </a>
+        <div id="claim-section">
+            <!-- Updated Instagram Hook -->
+            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
+                <img src="prize-button.png" alt="Claim Prize">
+            </a>
+        </div>
     </div>
 
     <script>
@@ -153,29 +169,28 @@
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
-        // Immediate solid filler to hide the prize edge during load
         ctx.fillStyle = '#002244';
-        ctx.fillRect(0, 0, 560, 560);
+        ctx.fillRect(0, 0, 550, 550);
 
         const coverImg = new Image();
         coverImg.crossOrigin = "anonymous";
         coverImg.src = 'seahawks-cover.png'; 
 
         coverImg.onload = () => {
-            ctx.clearRect(0, 0, 560, 560);
+            ctx.clearRect(0, 0, 550, 550);
             ctx.globalCompositeOperation = 'source-over';
-            ctx.drawImage(coverImg, 0, 0, 560, 560);
+            ctx.drawImage(coverImg, 0, 0, 550, 550);
             gameBox.style.visibility = 'visible';
         };
 
         function checkProgress() {
             try {
-                const pixels = ctx.getImageData(0, 0, 560, 560).data;
+                const pixels = ctx.getImageData(0, 0, 550, 550).data;
                 let clear = 0;
                 for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
                 
                 const percentage = (clear / (pixels.length / 4));
-                if (percentage > 0.45) {
+                if (percentage > 0.40) {
                     canvas.style.transition = "opacity 0.6s ease";
                     canvas.style.opacity = '0';
                     setTimeout(() => {
@@ -185,7 +200,7 @@
                     }, 500);
                 }
             } catch (e) {
-                console.warn("Scratch check blocked.");
+                console.warn("CORS/Security check blocked.");
             }
         }
 
@@ -193,12 +208,12 @@
             const r = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const x = (clientX - r.left) * (560 / r.width);
-            const y = (clientY - r.top) * (560 / r.height);
+            const x = (clientX - r.left) * (550 / r.width);
+            const y = (clientY - r.top) * (550 / r.height);
             
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath(); 
-            ctx.arc(x, y, 50, 0, Math.PI * 2); 
+            ctx.arc(x, y, 45, 0, Math.PI * 2); 
             ctx.fill();
             checkProgress();
         }
