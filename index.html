@@ -39,7 +39,10 @@
             margin: 10px auto; 
             width: 280px; 
             height: 280px; 
-            background-color: #01162b; 
+            /* The Stadium Background sits at the very bottom */
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
             border: 2px solid #69be28;
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(105, 190, 40, 0.3);
@@ -65,10 +68,10 @@
             width: 100%; 
             height: 100%; 
             z-index: 5; 
-            /* Updated to match your GitHub file: prize-reveal.gif */
+            /* The Reveal Image sits between the background and the canvas */
             background-image: url('prize-reveal.gif'); 
             background-position: center;
-            background-size: cover;
+            background-size: contain;
             background-repeat: no-repeat;
         }
 
@@ -122,15 +125,15 @@
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
-        // Safety mask
+        // Draw an initial solid color mask as a backup until the cover image loads
         ctx.fillStyle = '#002244';
         ctx.fillRect(0, 0, 560, 560);
 
         const coverImg = new Image();
         coverImg.crossOrigin = "anonymous";
         
-        // Updated to match your GitHub file: background.png
-        coverImg.src = 'background.png'; 
+        // This is the image we scratch away (The "Cover")
+        coverImg.src = 'seahawks-cover.png'; 
 
         coverImg.onload = () => {
             ctx.clearRect(0, 0, 560, 560);
@@ -139,10 +142,8 @@
         };
 
         coverImg.onerror = () => {
-            // Secondary fallback if background.png fails, try seahawks-cover.png
-            if (!coverImg.src.includes('seahawks-cover.png')) {
-                coverImg.src = 'seahawks-cover.png';
-            }
+            // Error handling if the filename doesn't match
+            console.error("Cover image failed to load. Ensure 'seahawks-cover.png' is in the repository.");
         };
 
         function checkProgress() {
