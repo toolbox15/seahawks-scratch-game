@@ -10,7 +10,6 @@
         body { 
             margin: 0; 
             padding: 0; 
-            /* Stadium background covers the whole screen */
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
@@ -127,6 +126,14 @@
             margin-top: 10px; 
         }
 
+        #claim-button {
+            display: inline-block;
+            text-decoration: none;
+            /* Shifted 3 pixels to the left as requested */
+            margin-right: 3px; 
+            position: relative;
+        }
+
         #claim-button img { 
             width: 210px; 
             filter: drop-shadow(0 0 15px #69be28);
@@ -169,8 +176,10 @@
         <div id="instruction-text" class="neon-text">SCRATCH TO WIN</div>
 
         <div id="claim-section">
-            <!-- Added target="_blank" and rel="noopener" to prevent the "refused to connect" error -->
-            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button" target="_blank" rel="noopener noreferrer">
+            <!-- JavaScript logic added to ensure the link breaks out of the iFrame -->
+            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" 
+               id="claim-button" 
+               onclick="window.open(this.href, '_blank'); return false;">
                 <img src="prize-button.png" alt="Claim Prize">
             </a>
             
