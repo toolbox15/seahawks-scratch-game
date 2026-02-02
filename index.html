@@ -3,64 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ScreenXcel | Big Game Scratch</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ScreenXcel | Big Game Day Scratch</title>
+    <style>
+        /* Seahawks-themed styling with digital signage aesthetics */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #002244; 
+            overflow: hidden; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-header { 
+            text-align: center; 
+            /* Moved up by 3 pixels to clear the ScreenXcel phone mockup boundaries */
+            margin-top: 7px; 
+            font-size: 24px; 
+            font-weight: 900;
+            text-shadow: 0 0 10px #69be28;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        #helmet-header { 
+            display: block; 
+            margin: 5px auto; 
+            width: 75px; 
+            height: auto;
+        }
+
+        /* Container is hidden by default to prevent the prize image from flashing before the cover loads */
+        .container { 
+            position: relative; 
+            margin: 10px auto; 
+            width: 300px; 
+            height: 300px; 
+            background: #002244; 
+            visibility: hidden; /* CRITICAL: Hides prize until cover image is drawn */
+            border: 2px solid #69be28;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(105, 190, 40, 0.2);
+        }
+
+        #scratch-canvas { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            z-index: 10; 
+            cursor: crosshair; 
+            touch-action: none; 
+            width: 100%; 
+            height: 100%; 
+        }
+
+        #prize { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 5; 
+            background: url('prize.png') center/contain no-repeat; 
+        }
+
+        .neon-text { 
+            text-align: center; 
+            color: #69be28; 
+            font-weight: bold; 
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 3px;
+        }
+
+        #claim-section { 
+            display: none; 
+            text-align: center; 
+            margin-top: 15px; 
+        }
+
+        #claim-button img { 
+            width: 190px; 
+            transition: transform 0.2s ease;
+        }
+        
+        #claim-button:active img {
+            transform: scale(0.92);
+        }
+    </style>
 </head>
 <body scroll="no">
 
     <h1 class="main-header">BIG GAME DAY LX</h1>
 
-    <img id="helmet-header" src="helmet.png">
+    <img id="helmet-header" src="helmet.png" alt="Seahawks Helmet">
 
     <div class="container" id="game-box">
         <div id="prize"></div>
-        <canvas id="scratch-canvas" width="580" height="580"></canvas>
+        <canvas id="scratch-canvas" width="600" height="600"></canvas>
     </div>
 
     <div id="instruction-text" class="neon-text">Scratch to Win</div>
 
     <div id="claim-section">
+        <!-- Direct DM link configured for Instagram -->
         <a href="https://ig.me/m/theponychicago?text=I%20WON%20BIG%20GAME%20WINGS!" id="claim-button">
-            <img src="prize-button.png">
+            <img src="prize-button.png" alt="Claim Prize">
         </a>
     </div>
 
     <script>
+        // Prevent default touch behavior (scrolling) to allow for smooth scratching
         document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
 
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
+        const gameBox = document.getElementById('game-box');
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
+        // PRE-FLIGHT GUARD: Fill canvas with navy blue color instantly
+        // This ensures the prize is masked even if the cover image loads slowly.
+        ctx.fillStyle = '#002244';
+        ctx.fillRect(0, 0, 600, 600);
+
+        // Preload the scratch-off cover image
         const coverImg = new Image();
         coverImg.src = 'seahawks-cover.png';
-        coverImg.onload = () => ctx.drawImage(coverImg, 0, 0, 580, 580);
+
+        coverImg.onload = () => {
+            // Draw the cover image onto the canvas
+            ctx.drawImage(coverImg, 0, 0, 600, 600);
+            // REVEAL: Only show the game container once the cover is fully painted
+            gameBox.style.visibility = 'visible';
+        };
 
         function checkProgress() {
-            const pixels = ctx.getImageData(0, 0, 580, 580).data;
+            const pixels = ctx.getImageData(0, 0, 600, 600).data;
             let clear = 0;
+            // Count transparent pixels (where the cover has been removed)
             for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
             
+            // If the user has scratched more than 50%, reveal the final prize button
             if ((clear / (pixels.length / 4)) > 0.50) {
-                canvas.style.transition = "opacity 0.4s ease";
+                canvas.style.transition = "opacity 0.6s ease";
                 canvas.style.opacity = '0';
                 setTimeout(() => {
                     canvas.style.display = 'none';
                     instruction.style.display = 'none';
                     claimSection.style.display = 'block';
-                }, 300);
+                }, 500);
             }
         }
 
-        canvas.addEventListener('touchmove', (e) => {
+        // Shared scratch logic for Touch and Mouse
+        function scratch(e) {
             const r = canvas.getBoundingClientRect();
-            const x = (e.touches[0].clientX - r.left) * (580 / r.width);
-            const y = (e.touches[0].clientY - r.top) * (580 / r.height);
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            // Calculate coordinates relative to the canvas internal resolution
+            const x = (clientX - r.left) * (600 / r.width);
+            const y = (clientY - r.top) * (600 / r.height);
+            
             ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 65, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); 
+            ctx.arc(x, y, 65, 0, Math.PI * 2); 
+            ctx.fill();
             checkProgress();
-        }, { passive: false });
+        }
+
+        // Mobile touch listeners
+        canvas.addEventListener('touchmove', scratch, { passive: false });
+
+        // Desktop mouse listeners for testing/previewing
+        canvas.addEventListener('mousedown', (e) => {
+             const scratchMove = (moveEvent) => scratch(moveEvent);
+             canvas.addEventListener('mousemove', scratchMove);
+             window.addEventListener('mouseup', () => {
+                 canvas.removeEventListener('mousemove', scratchMove);
+             }, { once: true });
+        });
     </script>
 </body>
 </html>
