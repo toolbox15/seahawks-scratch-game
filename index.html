@@ -31,10 +31,9 @@
             position: absolute;
             inset: 0;
             background: rgba(0, 34, 68, 0.65);
-            z-index: -1; /* Sits behind content but in front of body background-image */
+            z-index: -1;
         }
 
-        /* LAYER 3: All content elements */
         .main-header { 
             text-align: center; 
             margin-top: 10px;
@@ -62,11 +61,12 @@
             width: 280px; 
             height: 280px; 
             background: rgba(0, 34, 68, 0.5); 
-            border: 2px solid #69be28;
+            border: 3px solid #69be28;
             border-radius: 12px;
-            box-shadow: 0 0 25px rgba(105, 190, 40, 0.4);
+            /* Enhanced glow to mask the seam between canvas and box */
+            box-shadow: 0 0 25px 5px rgba(105, 190, 40, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.8);
             overflow: hidden;
-            visibility: hidden; /* Hidden until foil loads */
+            visibility: hidden;
             z-index: 10;
         }
 
@@ -74,7 +74,7 @@
             position: absolute; 
             top: 0; 
             left: 0; 
-            z-index: 12; /* Top layer of the scratch box */
+            z-index: 12;
             cursor: crosshair; 
             touch-action: none; 
             width: 100%; 
@@ -88,11 +88,14 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            z-index: 11; /* Revealed layer */
+            z-index: 11;
             background-image: url('prize-reveal.gif'); 
             background-position: center;
-            background-size: contain;
+            /* Changed from contain to cover to ensure no edges show */
+            background-size: cover; 
             background-repeat: no-repeat;
+            /* Subtle inner shadow to blend the prize with the stadium background */
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
         }
 
         .neon-text { 
@@ -149,7 +152,7 @@
         const claimSection = document.getElementById('claim-section');
         const instruction = document.getElementById('instruction-text');
 
-        // Immediate solid filler
+        // Immediate solid filler to hide the prize edge during load
         ctx.fillStyle = '#002244';
         ctx.fillRect(0, 0, 560, 560);
 
