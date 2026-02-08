@@ -3,258 +3,457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big Game Scratch | ScreenXcel</title>
+    <title>ScreenXcel | Football Fever Demo</title>
+    
+    <!-- Preload critical assets to improve loading speed on GitHub/Mobile -->
+    <link rel="preload" as="image" href="images/football-bg.png">
+    <link rel="preload" as="image" href="images/football-cover.png">
+    <link rel="preload" as="image" href="images/football.png">
+    <link rel="preload" as="image" href="images/qrcode.png">
+    
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; 
-            padding: 0; 
-            background-image: url('background.png');
-            background-size: cover;
-            background-position: center;
+            margin: 0; padding: 0; 
+            background-color: #050505;
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/football-bg.png');
+            background-size: 100% auto; 
+            background-position: center top 18%; 
             background-attachment: fixed;
-            background-color: #002244; 
+            background-repeat: no-repeat;
             overflow: hidden; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
             min-height: 100vh;
-            width: 100vw;
-            position: relative;
         }
 
-        body::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 34, 68, 0.65);
-            z-index: 1;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-        }
-
-        .main-header { 
-            text-align: center; 
-            margin: 0 0 5px 0;
-            font-size: 26px; 
-            font-weight: 900;
-            text-shadow: 0 0 20px rgba(105, 190, 40, 0.8);
-            letter-spacing: -1px;
-            text-transform: uppercase;
-            font-style: italic;
-        }
-
-        #helmet-header { 
-            display: block; 
-            margin-bottom: 15px; 
-            width: 85px; 
+        /* Decorative football icon positioned below background text */
+        .deco-football {
+            width: 70px;
             height: auto;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            margin-top: calc(155px + 16vh); 
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(105, 190, 40, 0.6));
+            z-index: 20;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .container { 
             position: relative; 
-            width: 275px; 
-            height: 275px; 
-            background: rgba(0, 34, 68, 0.8); 
-            border: 3px solid #69be28;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(105, 190, 40, 0.5);
+            width: 519px; 
+            height: 510px; 
+            max-width: 92vw;
+            height: auto;
+            aspect-ratio: 519 / 510;
+            margin-top: 0; 
+            background: transparent; 
+            border: 4px solid #69be28; 
+            border-radius: 12px; 
+            box-shadow: 0 0 50px rgba(105, 190, 40, 0.4); 
             overflow: hidden;
-            visibility: hidden;
+            user-select: none;
+        }
+
+        #prize-grid { 
+            position: absolute; 
+            inset: 0;
+            z-index: 5; 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            background: transparent;
+        }
+
+        .grid-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .grid-cell img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
         }
 
         #scratch-canvas { 
             position: absolute; 
             top: 0; 
             left: 0; 
-            z-index: 12;
-            cursor: crosshair; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 10; 
+            cursor: pointer; 
             touch-action: none; 
-            width: 100%; 
-            height: 100%; 
-            background: transparent !important;
+            opacity: 1; 
+            transition: opacity 0.3s ease;
         }
 
-        #prize { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: 11;
-            background-image: url('prize-reveal.gif'); 
-            background-position: center;
-            background-size: cover; 
-            background-repeat: no-repeat;
-        }
-
-        .neon-text { 
-            text-align: center; 
-            color: #69be28; 
-            font-weight: bold; 
-            margin-top: 15px;
-            text-transform: uppercase;
-            font-size: 15px;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px #69be28;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        #claim-section { 
-            display: none; 
-            text-align: center; 
-            margin-top: 10px; 
-        }
-
-        #claim-button {
-            display: inline-block;
-            text-decoration: none;
-            /* Shifted 3 pixels to the left as requested */
-            margin-right: 3px; 
-            position: relative;
-        }
-
-        #claim-button img { 
-            width: 210px; 
-            filter: drop-shadow(0 0 15px #69be28);
-            transition: transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .powered-by {
+        .status-bar {
             margin-top: 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: rgba(255,255,255,0.6);
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 8px;
         }
 
-        .powered-by span {
-            color: #69be28;
-            text-shadow: 0 0 5px #69be28;
+        .instruction-pill {
+            background: #69be28;
+            color: #000;
+            padding: 12px 40px;
+            border-radius: 99px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(105, 190, 40, 0.3);
         }
 
-        #claim-button:active img { transform: scale(0.95); }
+        #win-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 3px solid #69be28;
+            border-radius: 24px;
+            padding: 30px 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 0 60px rgba(105, 190, 40, 0.4);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            color: #69be28;
+            font-size: 38px;
+            font-weight: 900;
+            font-style: italic;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .prize-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .claim-btn {
+            background: #fff;
+            color: #000;
+            padding: 16px 25px;
+            border-radius: 12px;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            display: inline-block;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .qr-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(105, 190, 40, 0.3);
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            margin: 0 auto 8px;
+            display: block;
+        }
+
+        .qr-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #69be28;
+            font-weight: 700;
+        }
+
+        #game-over-section { 
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%);
+            text-align: center; 
+            width: 100%; 
+            z-index: 100; 
+            background: rgba(0,0,0,0.9);
+            padding: 40px 20px;
+            border: 2px solid #ff4444;
+            border-radius: 20px;
+        }
+
+        .limit-text {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 15px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body scroll="no">
 
-    <div class="content-wrapper">
-        <h1 class="main-header">BIG GAME DAY LX</h1>
+    <img src="images/football.png" alt="" class="deco-football">
 
-        <img id="helmet-header" src="helmet.png" alt="Helmet">
+    <div class="container">
+        <div id="prize-grid"></div>
+        <canvas id="scratch-canvas" width="519" height="510"></canvas>
+    </div>
 
-        <div class="container" id="game-box">
-            <div id="prize"></div>
-            <canvas id="scratch-canvas" width="550" height="550"></canvas>
-        </div>
+    <div class="status-bar" id="status-bar">
+        <div id="instruction" class="instruction-pill">Match 3 To Win</div>
+    </div>
 
-        <div id="instruction-text" class="neon-text">SCRATCH TO WIN</div>
-
-        <div id="claim-section">
-            <!-- JavaScript logic added to ensure the link breaks out of the iFrame -->
-            <a href="https://ig.me/m/screenxcel?text=I%20WON%20BIG%20GAME%20WINGS!" 
-               id="claim-button" 
-               onclick="window.open(this.href, '_blank'); return false;">
-                <img src="prize-button.png" alt="Claim Prize">
+    <!-- WIN PROMPT MODAL -->
+    <div id="win-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">WINNER!</h2>
+            <p class="prize-text">YOU UNLOCKED<br><span style="color:#69be28; font-size: 28px;">20% OFF WINGS</span></p>
+            <a href="https://ig.me/m/screenxcel?text=I%20FOUND%20ALL%203%20FOOTBALLS!" class="claim-btn">
+                CLAIM ON INSTAGRAM
             </a>
             
-            <div class="powered-by">
-                POWERED BY <span>SCREENXCEL</span>
+            <div class="qr-section">
+                <img src="images/qrcode.png" alt="Scan to Play" class="qr-code">
+                <div class="qr-label">Scan to Share the Fever</div>
             </div>
+
+            <p class="limit-text">Limit: One prize per hour.</p>
+        </div>
+    </div>
+
+    <div id="game-over-section">
+        <h2 style="font-style: italic; font-weight: 900; margin-bottom: 20px; color: #ff4444; font-size: 32px; text-transform: uppercase;">Turnover!</h2>
+        <p style="color:#fff; font-size: 18px; margin-bottom: 20px;">Try again in one hour!</p>
+        
+        <div class="qr-section">
+            <img src="images/qrcode.png" alt="Scan to Play" class="qr-code">
+            <div class="qr-label">Scan to Challenge a Friend</div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
-
         const canvas = document.getElementById('scratch-canvas');
         const ctx = canvas.getContext('2d');
-        const gameBox = document.getElementById('game-box');
-        const claimSection = document.getElementById('claim-section');
-        const instruction = document.getElementById('instruction-text');
+        const winModal = document.getElementById('win-modal');
+        const gameOverSection = document.getElementById('game-over-section');
+        const prizeGrid = document.getElementById('prize-grid');
+        const statusBar = document.getElementById('status-bar');
 
-        ctx.fillStyle = '#002244';
-        ctx.fillRect(0, 0, 550, 550);
+        const STORAGE_KEY = 'screenxcel_football_session';
+        const COOLDOWN_MS = 60 * 60 * 1000; 
 
-        const coverImg = new Image();
-        coverImg.crossOrigin = "anonymous";
-        coverImg.src = 'seahawks-cover.png'; 
+        const canvasW = 519; 
+        const canvasH = 510;
+        const cellW = 173;
+        const cellH = 170;
 
-        coverImg.onload = () => {
-            ctx.clearRect(0, 0, 550, 550);
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.drawImage(coverImg, 0, 0, 550, 550);
-            gameBox.style.visibility = 'visible';
-        };
+        let attemptsLeft = 3;
+        let winsFound = 0;
+        let revealedIndices = new Set();
+        let isGameOver = false;
 
-        function checkProgress() {
-            try {
-                const pixels = ctx.getImageData(0, 0, 550, 550).data;
-                let clear = 0;
-                for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) clear++; }
-                
-                const percentage = (clear / (pixels.length / 4));
-                if (percentage > 0.40) {
-                    canvas.style.transition = "opacity 0.6s ease";
-                    canvas.style.opacity = '0';
-                    setTimeout(() => {
-                        canvas.style.display = 'none';
-                        instruction.style.display = 'none';
-                        claimSection.style.display = 'flex';
-                        claimSection.style.flexDirection = 'column';
-                        claimSection.style.alignItems = 'center';
-                    }, 500);
-                }
-            } catch (e) {
-                console.warn("CORS/Security check blocked.");
+        const zones = [];
+        const prizeData = []; 
+
+        for(let r=0; r<3; r++) {
+            for(let c=0; c<3; c++) {
+                zones.push({
+                    x: c * cellW,
+                    y: r * cellH,
+                    w: cellW,
+                    h: cellH
+                });
             }
         }
 
-        function scratch(e) {
-            const r = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const x = (clientX - r.left) * (550 / r.width);
-            const y = (clientY - r.top) * (550 / r.height);
-            
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); 
-            ctx.arc(x, y, 45, 0, Math.PI * 2); 
-            ctx.fill();
-            checkProgress();
+        function checkPreviousPlay() {
+            const rawData = localStorage.getItem(STORAGE_KEY);
+            if (rawData) {
+                try {
+                    const session = JSON.parse(rawData);
+                    const timePassed = Date.now() - session.timestamp;
+                    
+                    if (timePassed < COOLDOWN_MS) {
+                        isGameOver = true;
+                        canvas.style.display = 'none';
+                        statusBar.style.display = 'none';
+                        const deco = document.querySelector('.deco-football');
+                        if (deco) deco.style.display = 'none';
+                        if (session.status === 'win') {
+                            winModal.style.display = 'flex';
+                        } else {
+                            gameOverSection.style.display = 'block';
+                        }
+                        return true;
+                    } else {
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                } catch (e) {
+                    localStorage.removeItem(STORAGE_KEY);
+                }
+            }
+            return false;
         }
 
-        canvas.addEventListener('touchmove', scratch, { passive: false });
-        canvas.addEventListener('mousedown', (e) => {
-             const move = (me) => scratch(me);
-             canvas.addEventListener('mousemove', move);
-             window.addEventListener('mouseup', () => canvas.removeEventListener('mousemove', move), { once: true });
-        });
+        function setupPrizes() {
+            prizeGrid.innerHTML = '';
+            const items = [
+                { type: 'win', src: 'images/icon-win.png' },
+                { type: 'win', src: 'images/icon-win.png' },
+                { type: 'win', src: 'images/icon-win.png' },
+                { type: 'lose', src: 'images/icon-lose.png' },
+                { type: 'lose', src: 'images/icon-lose.png' },
+                { type: 'lose', src: 'images/icon-lose.png' },
+                { type: 'lose', src: 'images/icon-lose.png' },
+                { type: 'lose', src: 'images/icon-lose.png' },
+                { type: 'lose', src: 'images/icon-lose.png' }
+            ];
+            
+            for (let i = items.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [items[i], items[j]] = [items[j], items[i]];
+            }
+
+            items.forEach((item, i) => {
+                prizeData[i] = item.type;
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                const img = new Image();
+                img.src = item.src;
+                cell.appendChild(img);
+                prizeGrid.appendChild(cell);
+            });
+        }
+
+        function initCanvas() {
+            const cover = new Image();
+            cover.src = 'images/football-cover.png'; 
+            cover.onload = () => { 
+                if (isGameOver) return;
+                zones.forEach(zone => {
+                    ctx.drawImage(cover, zone.x, zone.y, zone.w, zone.h);
+                });
+            };
+        }
+
+        function getCellIndex(x, y) {
+            const col = Math.floor(x / cellW);
+            const row = Math.floor(y / cellH);
+            if (col >= 0 && col < 3 && row >= 0 && row < 3) {
+                return row * 3 + col;
+            }
+            return -1;
+        }
+
+        function handleInteraction(e) {
+            if (isGameOver || attemptsLeft <= 0) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+            const clientY = (e.touches ? e.touches[0].clientY : e.clientY);
+            
+            const x = (clientX - rect.left) * (canvasW / rect.width);
+            const y = (clientY - rect.top) * (canvasH / rect.height);
+            
+            const index = getCellIndex(x, y);
+            
+            if (index !== -1 && !revealedIndices.has(index)) {
+                revealCell(index);
+            }
+        }
+
+        function revealCell(index) {
+            revealedIndices.add(index);
+            attemptsLeft--;
+
+            const zone = zones[index];
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillRect(zone.x, zone.y, zone.w, zone.h);
+
+            if (prizeData[index] === 'win') {
+                winsFound++;
+            }
+
+            checkGameState();
+        }
+
+        function checkGameState() {
+            if (winsFound === 3) {
+                isGameOver = true;
+                const sessionData = { status: 'win', timestamp: Date.now() };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionData));
+                setTimeout(() => {
+                    canvas.style.opacity = '0';
+                    canvas.style.pointerEvents = 'none';
+                    statusBar.style.display = 'none';
+                    const deco = document.querySelector('.deco-football');
+                    if (deco) deco.style.display = 'none';
+                    winModal.style.display = 'flex';
+                }, 400);
+            } else if (attemptsLeft === 0) {
+                isGameOver = true;
+                const sessionData = { status: 'lose', timestamp: Date.now() };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionData));
+                setTimeout(() => {
+                    canvas.style.opacity = '0.3';
+                    statusBar.style.display = 'none';
+                    const deco = document.querySelector('.deco-football');
+                    if (deco) deco.style.display = 'none';
+                    gameOverSection.style.display = 'block';
+                }, 400);
+            }
+        }
+
+        // Initialize everything
+        const alreadyPlayed = checkPreviousPlay();
+        if (!alreadyPlayed) {
+            setupPrizes();
+            initCanvas();
+        }
+
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleInteraction(e); }, { passive: false });
+        canvas.addEventListener('mousedown', (e) => { handleInteraction(e); });
     </script>
 </body>
 </html>
